@@ -44,7 +44,7 @@ y = np_utils.to_categorical(y, nb_classes).astype(np.float32)
 indices = np.arange(len(X))
 np.random.shuffle(indices)
 
-train_cutoff = int(len(X) * 0.9)
+train_cutoff = int(len(X) * 0.99)
 print(train_cutoff)
 
 X_train = X[indices[:train_cutoff]]
@@ -64,13 +64,16 @@ X_train = X_train.reshape(X_train.shape[0], X_train.shape[1], X_train.shape[2], 
 X_val = X_val.reshape(X_val.shape[0], X_val.shape[1], X_val.shape[2], 1)
 
 model = Sequential()
-model.add(Conv2D(32, (3, 3), activation='relu',input_shape=(img_rows,img_cols,1)))
+model.add(Conv2D(64, (3, 3), activation='relu',input_shape=(img_rows,img_cols,1)))
+model.add(Conv2D(32, (3, 3), activation='relu'))
 model.add(Conv2D(32, (3, 3), activation='relu'))
 model.add(MaxPooling2D(pool_size=(2, 2)))
 model.add(Dropout(0.25))
 model.add(Flatten())
-model.add(Dense(128, activation='relu'))
-model.add(Dropout(0.5))
+model.add(Dense(2048, activation='relu'))
+#model.add(Dropout(0.5))
+model.add(Dense(64, activation='relu'))
+#model.add(Dropout(0.75))
 model.add(Dense(nb_classes, activation='softmax'))
 model.summary()
 #from pdb import set_trace;set_trace()
@@ -86,8 +89,8 @@ datagen = ImageDataGenerator(
 )
 print(X_train.shape)
 
-model.fit_generator(datagen.flow(X_train, y_train, batch_size=128), class_weight=class_weight,
-                    nb_epoch=1, verbose=1, steps_per_epoch=100,
+model.fit_generator(datagen.flow(X_train, y_train, batch_size=256), class_weight=class_weight,
+                    nb_epoch=50, verbose=1, steps_per_epoch=100,
                     callbacks=[WandbKerasCallback()],
                     validation_data=(X_val, y_val))
 model.save("smile.h5")

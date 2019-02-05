@@ -72,11 +72,11 @@ img_rows, img_cols = X.shape[1:]
 X = X.reshape(X.shape[0], X.shape[1], X.shape[2], 1)
 
 model = Sequential()
-model.add(Conv2D(32, (3, 3), activation='relu',input_shape=(img_rows,img_cols,1)))
+model.add(Conv2D(64, (3, 3), activation='relu',input_shape=(img_rows,img_cols,1)))
 model.add(MaxPooling2D(pool_size=(2, 2)))
 model.add(Dropout(0.25))
 model.add(Flatten())
-model.add(Dense(128, activation='relu'))
+model.add(Dense(512, activation='relu'))
 model.add(Dropout(0.5))
 model.add(Dense(nb_classes, activation='softmax'))
 
