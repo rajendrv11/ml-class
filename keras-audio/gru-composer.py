@@ -113,15 +113,15 @@ def create_network(network_input, n_vocab):
     """ create the structure of the neural network """
     model = Sequential()
     model.add(GRU(
-        256,
+        512,
         input_shape=(network_input.shape[1], network_input.shape[2]),
         return_sequences=True
     ))
     model.add(Dropout(0.3))
-    model.add(GRU(128, return_sequences=True))
+    model.add(GRU(256, return_sequences=True))
     model.add(Dropout(0.3))
-    model.add(GRU(64))
-    model.add(Dense(256))
+    model.add(GRU(128))
+    model.add(Dense(1024))
     model.add(Dropout(0.3))
     model.add(Dense(n_vocab))
     model.add(Activation('softmax'))
@@ -244,5 +244,6 @@ def train(model, network_input, network_output):
 
 
 if __name__ == '__main__':
-    ensure_midi("mario")
+    get_notes()
+    #ensure_midi("mario")
     train_network()
